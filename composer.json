@@ -2,7 +2,13 @@
     "name": "samuelbie/mzmsisdn",
     "type": "library",
     "description": "An MSISDN identification and cleaner library for Mozambique subscribers",
-    "keywords": ["msisdn", "msisdn mozambique", "tmcel", "movitel", "vodacom"],
+    "keywords": [
+        "msisdn",
+        "msisdn mozambique",
+        "tmcel",
+        "movitel",
+        "vodacom"
+    ],
     "homepage": "https://github.com/Samuel-Bie/msisdn-mz-php.git",
     "license": "MIT",
     "authors": [
@@ -13,6 +19,9 @@
             "role": "Software Engineer"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [],
     "require": {
         "php": ">=5.4",
         "ext-json": "*"
@@ -33,11 +42,7 @@
             ]
         }
     },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    "config": {
+        "sort-packages": true
     }
 }
-
-
-
