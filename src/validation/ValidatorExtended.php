@@ -2,7 +2,7 @@
 
 namespace samuelbie\mzmsisdn\validation;
 
-use samuelbie\mzmsisdn\Rules\ValidMSIDSN;
+use samuelbie\mzmsisdn\Rules\ValidMSISDN;
 use Illuminate\Validation\Validator as IlluminateValidator;
 
 class ValidatorExtended extends IlluminateValidator
@@ -31,16 +31,16 @@ class ValidatorExtended extends IlluminateValidator
     }
 
 
-    protected function validateMsidsn($attribute, $value){
-        return (new ValidMSIDSN())->passes($attribute, $value);
+    protected function validateMsisdn($attribute, $value){
+        return (new ValidMSISDN())->passes($attribute, $value);
     }
-    protected function validateMsidsnVodacom($attribute, $value){
-        return (new ValidMSIDSN('vodacom'))->passes($attribute, $value);
+    protected function validateMsisdnVodacom($attribute, $value){
+        return (new ValidMSISDN('vodacom'))->passes($attribute, $value);
     }
-    protected function validateMsidsnTmcel($attribute, $value){
-        return (new ValidMSIDSN('tmcel'))->passes($attribute, $value);
+    protected function validateMsisdnTmcel($attribute, $value){
+        return (new ValidMSISDN('tmcel'))->passes($attribute, $value);
     }
-    protected function validateMsidsnMovitel($attribute, $value){
-        return (new ValidMSIDSN('movitel'))->passes($attribute, $value);
+    protected function validateMsisdnMovitel($attribute, $value){
+        return (new ValidMSISDN('movitel'))->passes($attribute, $value);
     }
 }

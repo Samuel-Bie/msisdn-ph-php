@@ -146,7 +146,7 @@ class Msisdn
 
 
     /**
-     * Validates and normalizes the MSISDN to 25882|3|4|5|6|7xxxxxxx as Mozambican MSIDSN.
+     * Validates and normalizes the MSISDN to 25882|3|4|5|6|7xxxxxxx as Mozambican MSISDN.
      * – Accepts MSISDN in the following formats:
      *      * (82|83|84|85|86|87)xxxxxxx
      *      * 258(82|83|84|85|86|87)xxxxxxx
