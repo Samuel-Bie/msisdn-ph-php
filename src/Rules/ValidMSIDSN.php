@@ -1,8 +1,10 @@
 <?php
+
 namespace samuelbie\mzmsisdn\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Exception;
 use samuelbie\mzmsisdn\Msisdn;
+use Illuminate\Contracts\Validation\Rule;
 
 class ValidMSIDSN implements Rule
 {
@@ -27,9 +29,19 @@ class ValidMSIDSN implements Rule
     public function passes($attribute, $value)
     {
         if (is_null($this->network))
-            return Msisdn::validate($value) ? true : false;
+            try {
+                return Msisdn::validate($value) ? true : false;
+            } catch (Exception $e) {
+                return false;
+            }
 
-        $number = new Msisdn($value);
+        $number = null;
+        try {
+            $number = new Msisdn($value);
+        } catch (Exception $e) {
+            return false;
+        }
+
         if ($this->network == 'tmcel') {
             return $number->isTmcel();
         }
@@ -49,6 +61,8 @@ class ValidMSIDSN implements Rule
      */
     public function message()
     {
-        return 'The :attribute is not a valid mozambican number.';
+        $target = $this->network ?? 'mozambican';
+
+        return 'The :attribute is not a valid ' . $target . ' number.';
     }
 }

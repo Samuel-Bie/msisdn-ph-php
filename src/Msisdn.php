@@ -1,6 +1,7 @@
 <?php
 namespace samuelbie\mzmsisdn;
 
+
 use Exception;
 use samuelbie\mzmsisdn\InvalidMsisdnException;
 
@@ -28,6 +29,7 @@ class Msisdn
      */
     public function __construct($msisdn)
     {
+
         if (Msisdn::validate($msisdn) === false) {
             throw new InvalidMsisdnException(
                 'The supplied MSISDN is not valid. ' .
@@ -37,6 +39,7 @@ class Msisdn
             );
         }
         $this->msisdn = self::normalizeNumber($msisdn);
+        $this->setPrefixes();
     }
 
     public function getFullNumber(){
