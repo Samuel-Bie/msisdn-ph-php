@@ -3,7 +3,7 @@
     "type": "library",
     "description": "An MSISDN identification and cleaner library for Mozambique subscribers",
     "keywords": ["msisdn", "msisdn mozambique", "tmcel", "movitel", "vodacom"],
-    "homepage": "https://github.com/Samuel-Bie/msisdn-ph-php",
+    "homepage": "https://github.com/Samuel-Bie/msisdn-mz-php.git",
     "license": "MIT",
     "authors": [
         {
