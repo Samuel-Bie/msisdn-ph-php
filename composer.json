@@ -1,16 +1,16 @@
 {
-    "name": "coreproc/msisdn-ph",
+    "name": "samuelbie/mzmsisdn",
     "type": "library",
-    "description": "An MSISDN identification and cleaner library for Philippine telco subscribers",
-    "keywords": ["msisdn", "msisdn philippines", "globe", "smart", "sun", "mobile number"],
-    "homepage": "http://github.com/coreproc/msisdn-ph-php",
+    "description": "An MSISDN identification and cleaner library for Mozambique subscribers",
+    "keywords": ["msisdn", "msisdn mozambique", "tmcel", "movitel", "vodacom"],
+    "homepage": "https://github.com/Samuel-Bie/msisdn-ph-php",
     "license": "MIT",
     "authors": [
         {
-            "name": "Chris Bautista",
-            "email": "chris.bautista@coreproc.ph",
-            "homepage": "https://coreproc.com",
-            "role": "Developer"
+            "name": "Samuel Bie",
+            "email": "samuelbie@outlook.com",
+            "homepage": "https://samuel-bie.github.io",
+            "role": "Software Engineer"
         }
     ],
     "require": {
@@ -23,7 +23,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Coreproc\\MsisdnPh\\": "src"
+            "samuelbie\\mzmsisdn\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "samuelbie\\mzmsisdn\\MZMsisdnServiceProvider"
+            ]
         }
     },
     "scripts": {
@@ -31,3 +38,6 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     }
 }
+
+
+

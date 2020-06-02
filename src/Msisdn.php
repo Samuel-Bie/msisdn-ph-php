@@ -1,24 +1,25 @@
 <?php
 
-namespace Coreproc\MsisdnPh;
+namespace samuelbie\mzmsisdn;
 
-use Coreproc\MsisdnPh\Exceptions\InvalidMsisdnException;
+use Exception;
+use samuelbie\mzmsisdn\InvalidMsisdnException;
 
 class Msisdn
 {
     private $msisdn;
 
-    private $smartPrefixes = null;
+    private $mcelPrefixes = null;
 
-    private $globePrefixes = null;
+    private $vodacomPrefixes = null;
 
-    private $sunPrefixes = null;
+    private $movitelPrefixes = null;
 
     private $prefix = null;
 
     private $operator = null;
 
-    protected $countryPrefix = '+63';
+    protected $countryPrefix = '+258';
 
     /**
      * Msisdn constructor.
@@ -31,44 +32,21 @@ class Msisdn
         if (Msisdn::validate($msisdn) === false) {
             throw new InvalidMsisdnException(
                 'The supplied MSISDN is not valid. ' .
-                'You can use the `Msisdn::validate()` method ' .
-                'to validate the MSISDN being passed.',
+                    'You can use the `Msisdn::validate()` method ' .
+                    'to validate the MSISDN being passed.',
                 400
             );
         }
-
-        $this->msisdn = self::clean($msisdn);
+        $this->msisdn = self::normalizeNumber($msisdn);
     }
 
-    /**
-     * Returns a formatted mobile number
-     *
-     * @param bool|false $hasCountryCode
-     * @param string $separator
-     * @return mixed|string
-     */
-    function get($hasCountryCode = false, $separator = '')
-    {
-        if (! $hasCountryCode) {
-            $formattedNumber = '0' . $this->msisdn;
-
-            if (! empty($separator)) {
-                $formattedNumber = substr_replace($formattedNumber, $separator, 4, 0);
-                $formattedNumber = substr_replace($formattedNumber, $separator, 8, 0);
-            }
-        } else {
-            $formattedNumber = $this->countryPrefix . $this->msisdn;
-
-            if (! empty($separator)) {
-                $formattedNumber = substr_replace($formattedNumber, $separator, strlen($this->countryPrefix), 0);
-                $formattedNumber = substr_replace($formattedNumber, $separator, 7, 0);
-                $formattedNumber = substr_replace($formattedNumber, $separator, 11, 0);
-            }
-        }
-
-        return $formattedNumber;
+    public function getFullNumber(){
+        return $this->countryPrefix. $this->msisdn;
     }
 
+    public function getMSISDN(){
+        return preg_replace("/[^0-9]/", "", $this->countryPrefix. $this->msisdn);
+    }
     /**
      * Returns the prefix of the MSISDN number.
      *
@@ -77,9 +55,8 @@ class Msisdn
     public function getPrefix()
     {
         if ($this->prefix == null) {
-            $this->prefix = substr($this->msisdn, 0, 3);
+            $this->prefix = substr($this->msisdn, 0, 2);
         }
-
         return $this->prefix;
     }
 
@@ -92,92 +69,99 @@ class Msisdn
     {
         $this->setPrefixes();
 
-        if (! empty($this->operator)) {
+        if (!empty($this->operator)) {
             return $this->operator;
         }
 
-        if (in_array($this->getPrefix(), $this->globePrefixes)) {
-            $this->operator = 'GLOBE';
-
+        if ($this->isVodacom()) {
+            $this->operator = 'VODACOM';
             return $this->operator;
         }
 
-        if (in_array($this->getPrefix(), $this->smartPrefixes)) {
-            $this->operator = 'SMART';
-
+        if ($this->isTmcel()) {
+            $this->operator = 'TMCEL';
             return $this->operator;
         }
 
-        if (in_array($this->getPrefix(), $this->sunPrefixes)) {
-            $this->operator = 'SUN';
-
+        if ($this->isMovitel()) {
+            $this->operator = 'MOVITEL';
             return $this->operator;
         }
-
         $this->operator = 'UNKNOWN';
-
         return $this->operator;
     }
 
     private function setPrefixes()
     {
-        if (empty($this->smartPrefixes)) {
-            $this->smartPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/smart.json'));
+        if (empty($this->mcelPrefixes)) {
+            $this->mcelPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/mcel.json'));
         }
 
-        if (empty($this->globePrefixes)) {
-            $this->globePrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/globe.json'));
+        if (empty($this->vodacomPrefixes)) {
+            $this->vodacomPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/vodacom.json'));
         }
 
-        if (empty($this->sunPrefixes)) {
-            $this->sunPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/sun.json'));
+        if (empty($this->movitelPrefixes)) {
+            $this->movitelPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/movitel.json'));
         }
     }
+
+    public function isVodacom()
+    {
+        return (in_array($this->getPrefix(), $this->vodacomPrefixes));
+    }
+    public function isTmcel()
+    {
+        return (in_array($this->getPrefix(), $this->mcelPrefixes));
+    }
+    public function isMovitel()
+    {
+        return (in_array($this->getPrefix(), $this->movitelPrefixes));
+    }
+
 
     /**
      * Validate a given mobile number
      *
      * @param string $mobileNumber
-     * @return bool
+     * @return bool|string  phone number: (82|83|84|85|86|87)xxxxxxx
      */
-    public static function validate($mobileNumber)
+    public static function validate($msisdn)
     {
-        $mobileNumber = Msisdn::clean($mobileNumber);
-
-        return ! empty($mobileNumber) &&
-            strlen($mobileNumber) === 10 &&
-            is_numeric($mobileNumber);
-    }
-
-    /**
-     * Cleans the string
-     *
-     * @param string $msisdn
-     * @return string The clean MSISDN
-     */
-    private static function clean($msisdn)
-    {
+        // Remove non digit chars
         $msisdn = preg_replace("/[^0-9]/", "", $msisdn);
-
-        // We remove the 0 or 63 from the number
-        if (substr($msisdn, 0, 1) === '0') {
-            $msisdn = substr($msisdn, 1, strlen($msisdn));
-        } else {
-            if (substr($msisdn, 0, 2) === '63') {
-                $msisdn = substr($msisdn, 2, strlen($msisdn));
-            }
-        }
-
-        return $msisdn;
+        // $matchGroup array contains 5 pairs:
+        // – [0] -> the full match.
+        // – [1] -> starts with + or 00.
+        // – [2] -> the country code 258.
+        // – [3] -> the phone number without the country code. Includes the local prefix.
+        // – [4] -> the local prefix, either 84 or 85.
+        $matchGroup = array();
+        if (preg_match('/^(\+|00)?(258)?((82|83|84|85|86|87)\d{7})$/', $msisdn, $matchGroup))
+            return  $matchGroup[3];
+        return false;
     }
 
+
     /**
-     * Sets the country prefix - this defaults to +63
+     * Validates and normalizes the MSISDN to 25882|3|4|5|6|7xxxxxxx as Mozambican MSIDSN.
+     * – Accepts MSISDN in the following formats:
+     *      * (82|83|84|85|86|87)xxxxxxx
+     *      * 258(82|83|84|85|86|87)xxxxxxx
+     *      * +258(82|83|84|85|86|87)xxxxxxx
+     *      * 00258(82|83|84|85|86|87)xxxxxxx
      *
-     * @param $countryPrefix
+     * @param string $msisdn msisdn which will be validated and normalized afterwards.
+     * @return string normalized phone number: (82|83|84|85|86|87)xxxxxxx
+     * @throws Exception
      */
-    public function setCountryPrefix($countryPrefix)
+    public static function normalizeNumber($msisdn)
     {
-        $this->countryPrefix = $countryPrefix;
+        $number = static::validate($msisdn);
+        if ($number) {
+            return $number;
+        } else {
+            throw new Exception("The provided number " . $msisdn . " is not valid Mozambican MSISDN.");
+        }
     }
 }
