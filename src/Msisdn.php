@@ -1,5 +1,4 @@
 <?php
-
 namespace samuelbie\mzmsisdn;
 
 use Exception;
