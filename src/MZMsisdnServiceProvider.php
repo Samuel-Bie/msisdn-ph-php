@@ -1,9 +1,9 @@
 <?php
 namespace samuelbie\mzmsisdn;
 
-use App\Rules\ValidMSIDSN;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use samuelbie\mzmsisdn\Rules\ValidMSIDSN;
 
 class MZMsisdnServiceProvider extends ServiceProvider
 {
