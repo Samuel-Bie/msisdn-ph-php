@@ -1,4 +1,5 @@
 <?php
+
 namespace samuelbie\mzmsisdn;
 
 
@@ -42,12 +43,19 @@ class Msisdn
         $this->setPrefixes();
     }
 
-    public function getFullNumber(){
-        return $this->countryPrefix. $this->msisdn;
+    public function getFullNumber()
+    {
+        return $this->countryPrefix . $this->msisdn;
     }
 
-    public function getMSISDN(){
-        return preg_replace("/[^0-9]/", "", $this->countryPrefix. $this->msisdn);
+    public function getMSISDN()
+    {
+        return preg_replace("/[^0-9]/", "", $this->getFullNumber());
+    }
+
+    public function getFormated()
+    {
+        return '+' . number_format($this->getMSISDN(), 0, '.', ' ');
     }
     /**
      * Returns the prefix of the MSISDN number.
