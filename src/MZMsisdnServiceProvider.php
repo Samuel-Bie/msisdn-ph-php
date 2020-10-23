@@ -1,9 +1,12 @@
 <?php
+namespace Samuelbie\MzMsisdn;
 
-namespace samuelbie\mzmsisdn;
+
 
 use Illuminate\Support\ServiceProvider;
-use samuelbie\mzmsisdn\validation\ValidatorExtended;
+use Samuelbie\MzMsisdn\Validation\ValidatorExtended;
+
+
 class MZMsisdnServiceProvider extends ServiceProvider
 {
 

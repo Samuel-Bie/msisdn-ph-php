@@ -3,34 +3,33 @@
 class MsisdnTest extends PHPUnit_Framework_TestCase
 {
     protected $validMobileNumbers = [
-        '09171231234',
-        '0917-123-1234',
-        '63917-123-1234',
-        '+63-917-123-1234',
-        '+63.917.123.1234 ',
-        '+639171231234',
-        ' +639171231234  ',
+        '+258 823847556',
+        '82387556',
     ];
 
     protected $invalidMobileNumbers = [
-        '0918123123',
-        '+6391812312345',
+        '+823847556',
+        '+8183684456',
         '',
     ];
 
     public function testValidNumbers()
     {
         foreach ($this->validMobileNumbers as $mobileNumber) {
-            $this->assertTrue(Coreproc\MsisdnPh\Msisdn::validate($mobileNumber),
-                'Mobile number "' . $mobileNumber . '" should be valid.');
+            $this->assertTrue(
+                Coreproc\MsisdnPh\Msisdn::validate($mobileNumber),
+                'Mobile number "' . $mobileNumber . '" should be valid.'
+            );
         }
     }
 
     public function testInvalidNumbers()
     {
         foreach ($this->invalidMobileNumbers as $mobileNumber) {
-            $this->assertFalse(Coreproc\MsisdnPh\Msisdn::validate($mobileNumber),
-                'Mobile number "' . $mobileNumber . '" should be invalid.');
+            $this->assertFalse(
+                Coreproc\MsisdnPh\Msisdn::validate($mobileNumber),
+                'Mobile number "' . $mobileNumber . '" should be invalid.'
+            );
         }
     }
 

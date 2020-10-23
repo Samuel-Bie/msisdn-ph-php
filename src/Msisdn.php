@@ -1,10 +1,10 @@
 <?php
+namespace Samuelbie\MzMsisdn;
 
-namespace samuelbie\mzmsisdn;
 
 
 use Exception;
-use samuelbie\mzmsisdn\InvalidMsisdnException;
+use Samuelbie\MzMsisdn\Exceptions\InvalidMsisdnException;
 
 class Msisdn
 {

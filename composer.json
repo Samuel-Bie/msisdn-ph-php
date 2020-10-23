@@ -32,13 +32,13 @@
     },
     "autoload": {
         "psr-4": {
-            "samuelbie\\mzmsisdn\\": "src"
+            "Samuelbie\\MzMsisdn\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "samuelbie\\mzmsisdn\\MZMsisdnServiceProvider"
+                "Samuelbie\\MzMsisdn\\MZMsisdnServiceProvider"
             ]
         }
     },

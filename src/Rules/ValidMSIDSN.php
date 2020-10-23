@@ -1,9 +1,8 @@
 <?php
-
-namespace samuelbie\mzmsisdn\Rules;
+namespace Samuelbie\MzMsisdn\Rules;
 
 use Exception;
-use samuelbie\mzmsisdn\Msisdn;
+use Samuelbie\MzMsisdn\Msisdn;
 use Illuminate\Contracts\Validation\Rule;
 
 class ValidMSISDN implements Rule

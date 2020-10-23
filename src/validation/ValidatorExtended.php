@@ -1,8 +1,7 @@
 <?php
+namespace Samuelbie\MzMsisdn\Validation;
 
-namespace samuelbie\mzmsisdn\validation;
-
-use samuelbie\mzmsisdn\Rules\ValidMSISDN;
+use Samuelbie\MzMsisdn\Rules\ValidMSISDN;
 use Illuminate\Validation\Validator as IlluminateValidator;
 
 class ValidatorExtended extends IlluminateValidator

@@ -1,6 +1,6 @@
 <?php
+namespace Samuelbie\MzMsisdn\Exceptions;
 
-namespace samuelbie\mzmsisdn;
 class InvalidMsisdnException extends \Exception
 {
     public static function create($message)
