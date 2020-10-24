@@ -2,10 +2,9 @@
 1 - Track changes
 	git add .
 2 - Commit changes
-	git commit -m "Bug fix and add comply with psr-4 standards"
 
 3 - Add Tag
-	git tag 2.0.0
+	git tag 2.0.1
 
 4 - Git push
 	git push --all
