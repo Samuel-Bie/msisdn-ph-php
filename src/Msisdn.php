@@ -1,5 +1,5 @@
 <?php
-namespace Samuelbie\MzMsisdn;
+namespace Samuelbie\Helpers;
 
 
 
