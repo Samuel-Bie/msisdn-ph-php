@@ -1,5 +1,5 @@
 <?php
-namespace Samuelbie\Helpers;
+namespace Samuelbie\MzMsisdn;
 
 
 
@@ -43,19 +43,20 @@ class Msisdn
         $this->setPrefixes();
     }
 
+
+    public function get()
+    {
+        return preg_replace("/[^0-9]/", "", $this->getFullNumber());
+    }
+
     public function getFullNumber()
     {
         return $this->countryPrefix . $this->msisdn;
     }
 
-    public function getMSISDN()
+    public function getFormatted()
     {
-        return preg_replace("/[^0-9]/", "", $this->getFullNumber());
-    }
-
-    public function getFormated()
-    {
-        return '+' . number_format($this->getMSISDN(), 0, '.', ' ');
+        return '+' . number_format($this->get(), 0, '.', ' ');
     }
     /**
      * Returns the prefix of the MSISDN number.
@@ -104,15 +105,15 @@ class Msisdn
     private function setPrefixes()
     {
         if (empty($this->mcelPrefixes)) {
-            $this->mcelPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/mcel.json'));
+            $this->mcelPrefixes = json_decode(file_get_contents(__DIR__ . '/Prefixes/mcel.json'));
         }
 
         if (empty($this->vodacomPrefixes)) {
-            $this->vodacomPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/vodacom.json'));
+            $this->vodacomPrefixes = json_decode(file_get_contents(__DIR__ . '/Prefixes/vodacom.json'));
         }
 
         if (empty($this->movitelPrefixes)) {
-            $this->movitelPrefixes = json_decode(file_get_contents(__DIR__ . '/prefixes/movitel.json'));
+            $this->movitelPrefixes = json_decode(file_get_contents(__DIR__ . '/Prefixes/movitel.json'));
         }
     }
 

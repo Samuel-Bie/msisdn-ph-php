@@ -5,7 +5,7 @@ use Exception;
 use Samuelbie\MzMsisdn\Msisdn;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidMSISDN implements Rule
+class ValidMsisdn implements Rule
 {
     private $network = null;
     /**

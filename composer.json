@@ -23,7 +23,6 @@
     "prefer-stable": true,
     "repositories": [],
     "require": {
-        "php": ">=5.4",
         "ext-json": "*",
         "illuminate/support": "^8.11"
     },

@@ -1,4 +1,4 @@
-MsisdnPH - PHP
+MZ MSISISDN (Números de celulares moçambicanos)
 =====================
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
@@ -8,35 +8,42 @@ MsisdnPH - PHP
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Easily validate and manipulate Philippine mobile numbers.
+Facilmente validando e manipulando números de celulares Moçambicanos.
+Suporte para TMcel, Vodacom, e Movitel
 
-## Table of contents
+## Índice
 
-* [Install](#install)
-* [Usage](#usage)
-    * [Validate the mobile number](#validate-the-mobile-number)
-    * [Instantiate an MSISDN object](#instantiate-an-msisdn-object)
-    * [Return a standardized format of your mobile number](#return-a-standardized-format-of-your-mobile-number)
-    * [Get the telco operator of a mobile number](#get-the-telco-operator-of-a-mobile-number)
-    * [Get the prefix of a mobile number](#get-the-prefix-of-a-mobile-number)
-    * [Validating mobile numbers using Laravel 5.1](#validating-mobile-numbers-using-laravel-51)
-* [Credits](#credits)
-* [License](#license)
+- [MZ MSISISDN (Números de celulares moçambicanos)](#mz-msisisdn-números-de-celulares-moçambicanos)
+  - [Índice](#índice)
+  - [Instalação](#instalação)
+  - [Utilização](#utilização)
+    - [Validate the mobile number](#validate-the-mobile-number)
+    - [Instantiate an MSISDN object](#instantiate-an-msisdn-object)
+    - [Formato padronizado dos números de celular](#formato-padronizado-dos-números-de-celular)
+    - [Funções baseadas em operadoras](#funções-baseadas-em-operadoras)
+    - [Verificando a operadora](#verificando-a-operadora)
+    - [Prefixo da operadora](#prefixo-da-operadora)
+    - [Integração as validações Laravel](#integração-as-validações-laravel)
+  - [Credits](#credits)
+  - [License](#license)
 
-## Install
+## Instalação
 
-Run the following command at the root of your project (assuming you have Composer and a composer.json file already)
+Execute na raiz do seu projeto (assumindo que tenhas instalado o [Composer](https://getcomposer.org/)) o seguinte comando:
+
 
 ```bash
-composer require coreproc/msisdn-ph "^1.0"
+composer require samuelbie/mzmsisdn
 ```
 
-## Usage
+## Utilização
 
 ### Validate the mobile number
 
+A maneira mais básica é executando o método estático `validate` da classe `Msisdn`, passando como parâmetro o número de celular.
+
 ```php
-$mobileNumber = '09171231234';
+$mobileNumber = '823847698';
 
 if (Msisdn::validate($mobileNumber)) {
     echo 'Valid mobile number';
@@ -45,30 +52,30 @@ if (Msisdn::validate($mobileNumber)) {
 }
 ```
 
-The `validate` method cleans the given mobile number and validates it so even if the mobile number is malformed or has other characters within it, it will still return true as long as the number is really valid:
+O método `validate` compila ou sanitiza o número dado como entrada e realiza a validação, garantindo que mesmo que o usuário tenha introduzido carateres de separação no meio da string o método retorne verdadeiro caso seja realmente válido:
 
 ```php
-$validMobileNumber = '+639171231234';
-$validMobileNumber = '+63-917-123-1234';
-$validMobileNumber = '0917-123-1234';
-$validMobileNumber = '0917.123.1234';
-$validMobileNumber = '63 917 123 12 34 ';
+$validMobileNumber = '+258823847556';
+$validMobileNumber = '+258-82-38-47-556';
+$validMobileNumber = '847386187';
+$validMobileNumber = '84.738.6187';
+$validMobileNumber = '258 82 38 47 556 ';
 ```
 
 ### Instantiate an MSISDN object
 
-You can instantiate an MSISDN object and get a standardized format of your mobile number and even get the telco attached to the mobile number using this object.
+De outro jeito podemos também criar uma instância da classe MSISDN e o contacto é padronizado ao formato Moçambicano.
 
 ```php
-$mobileNumber = '09171231234';
+$mobileNumber = '823847556';
 
 $msisdn = new Msisdn($mobileNumber);
 ```
 
-The MSISDN object will throw an `InvalidMsisdnException` if you give it an invalid mobile number, so it's best to either catch the exception OR validate it before creating an MSISDN object.
+O objecto MSISDN irá lançar uma  `InvalidMsisdnException` caso o construtor não seja alimentado com um número válido. Nesse contexto é uma boa ideia tratar a excepção ou validar o número antes de construir o objecto.
 
 ```php
-$invalidMobileNumber = '0917-123-123';
+$invalidMobileNumber = '82-38-47-55';
 
 try {
    $msisdn = new Msisdn($invalidMobileNumber);
@@ -81,7 +88,8 @@ try {
 OR
 
 ```php
-$invalidMobileNumber = '0917-123-123';
+$invalidMobileNumber = '82-38-47-55';
+
 
 if (Msisdn::validate($invalidMobileNumber)) {
     $msisdn = new Msisdn($invalidMobileNumber);
@@ -92,77 +100,107 @@ if (Msisdn::validate($invalidMobileNumber)) {
 ```
 
 
-### Return a standardized format of your mobile number
+### Formato padronizado dos números de celular
 
-When you've instantiated an `Msisdn` object, you can return the mobile number in any format you want.
+Ao instanciar um objecto `Msisdn`,  poderá retornar vários formatos de números de celular, dependendo naturalmente do que será mais útil para o seu contexto.
 
 ```php
-$mobileNumber = '09171231234';
+$mobileNumber = '823847556';
 
 $msisdn = new Msisdn($mobileNumber);
 
-echo $msisdn->get(); // will return 09171231234
+echo $msisdn->get(); // will return 258823847556
 
-echo $msisdn->get(true); // will return +639171231234
+echo $msisdn->getFormatted(); // will return "+258 823 847 556"
 
-echo $msisdn->get(false, '-'); // will return 0917-123-1234
-
-echo $msisdn->get(true, '-'); // will return +63-917-123-1234
-
-echo $msisdn->get(true, '.'); // will return +63.917.123.1234
+echo $msisdn->getFullNumber(); // will return +258823847556
 ```
 
-### Get the telco operator of a mobile number
+### Funções baseadas em operadoras
 
-You can also get the telco operator of the given mobile number - this is based on the included prefixes we have gathered from the telcos.
+Pode ser que lhe convenha realizar algumas funções baseadas na operadora raiz do contacto.
 
-We cannot guarantee that this list is updated so use with a grain of salt.
+Nesta área assumisse que:
 
-If you want to add to the prefixes, you can find the list inside the `src/prefixes` directory.
+1. **82 ou 83** são prefixos da TMcel
+1. **84 ou 85** são prefixos da Vodacom
+1. **86 ou 87** são prefixos da Movitel
 
 ```php
-$mobileNumber = '09171231234';
+$mobileNumber = '823847555';
 
 $msisdn = new Msisdn($mobileNumber);
 
-echo $msisdn->getOperator(); // will return Globe
+echo $msisdn->getOperator(); // will return TMCEL
 ```
 
-### Get the prefix of a mobile number
+### Verificando a operadora
 
-You might just want to get the prefix of a mobile number.
+Assuma por exemplo que queiras saber se o contacto é de uma determinada operadora.
+
 
 ```php
-$mobileNumber = '09171231234';
+$mobileNumber = '823847555';
 
 $msisdn = new Msisdn($mobileNumber);
 
-echo $msisdn->getPrefix(); // will return 917
+echo $msisdn->isVodacom(); // will return false
+echo $msisdn->isTmcel(); // will return true
+echo $msisdn->isMovitel(); // will return false
 ```
 
-### Validating mobile numbers using Laravel 5.1
+```php
+$mobileNumber = '847386728';
 
-You can easily integrate this into Laravel's validator class by adding the line below to the default `AppServiceProvider` located in the `app/Providers` directory.
+$msisdn = new Msisdn($mobileNumber);
 
-Inside the `boot()` method, add the following line:
+
+echo $msisdn->isVodacom(); // will return true
+echo $msisdn->isTmcel(); // will return false
+echo $msisdn->isMovitel(); // will return false
+```
+### Prefixo da operadora
+
+De igual forma você pode coletar o prefixo da operadora apenas.
 
 ```php
-Validator::extend('msisdn', function ($attribute, $value, $parameters) {
-    return Coreproc\MsisdnPh\Msisdn::validate($value);
-});
+$mobileNumber = '823847556';
+
+$msisdn = new Msisdn($mobileNumber);
+
+echo $msisdn->getPrefix(); // will return 82
+```
+
+### Integração as validações Laravel
+
+Este pacote já traz consigo a integração com as validações laravel, onde poderá facilmente efetuar validações aos seus `HTTP requests`.
+
+
+```php
+"msisdn"            // This validates mozambican mobile number
+"msisdn_vodacom"    // This just vodacom mobile number
+"msisdn_movitel"    // This just movitel mobile number
+"msisdn_tmcel"      // This just tmcel mobile number
+```
+
+Example
+
+```php
+
+    $validated = $request->validate([
+        'telefone' => 'bail|required|msisdn',
+        'contacto_vodacom' => 'bail|required|msisdn_vodacom',
+        'contacto_movitel' => 'bail|required|msisdn_movitel',
+        'contacto_tmcel' => 'bail|required|msisdn_tmcel',
+    ]);
+
 ```
 
 ## Credits
 
-- [Chris Bautista][link-author]
-- [All Contributors][link-contributors]
-
-## About CoreProc
-
-CoreProc is a software development company that provides software development services to startups, digital/ad agencies, and enterprises.
-
-Learn more about us on our [website](https://coreproc.com).
-
+- [Samuel Bié][link-author]
+- [Pessoal de um Pacote das Filipinas][core-proc]
+ 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
@@ -180,4 +218,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-code-quality]: https://scrutinizer-ci.com/g/CoreProc/msisdn-ph-php
 [link-downloads]: https://packagist.org/packages/coreproc/msisdn-ph
 [link-author]: https://github.com/chrisbjr
-[link-contributors]: ../../contributors
+[core-proc]: ../../contributors
