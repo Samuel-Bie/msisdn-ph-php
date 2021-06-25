@@ -5,7 +5,7 @@
 	git commit -m "Rename some Classes and add a Basic Documentation"
 
 3 - Add Tag
-	git tag 2.1.0
+	git tag 2.1.1
 
 4 - Git push
 	git push --all
