@@ -1,4 +1,5 @@
 <?php
+
 namespace Samuelbie\MzMsisdn\Validation;
 
 use Samuelbie\MzMsisdn\Rules\ValidMsisdn;
@@ -30,16 +31,20 @@ class ValidatorExtended extends IlluminateValidator
     }
 
 
-    protected function validateMsisdn($attribute, $value){
+    protected function validateMsisdn($attribute, $value)
+    {
         return (new ValidMsisdn())->passes($attribute, $value);
     }
-    protected function validateMsisdnVodacom($attribute, $value){
+    protected function validateMsisdnVodacom($attribute, $value)
+    {
         return (new ValidMsisdn('vodacom'))->passes($attribute, $value);
     }
-    protected function validateMsisdnTmcel($attribute, $value){
+    protected function validateMsisdnTmcel($attribute, $value)
+    {
         return (new ValidMsisdn('tmcel'))->passes($attribute, $value);
     }
-    protected function validateMsisdnMovitel($attribute, $value){
+    protected function validateMsisdnMovitel($attribute, $value)
+    {
         return (new ValidMsisdn('movitel'))->passes($attribute, $value);
     }
 }

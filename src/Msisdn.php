@@ -1,7 +1,6 @@
 <?php
+
 namespace Samuelbie\MzMsisdn;
-
-
 
 use Exception;
 use Samuelbie\MzMsisdn\Exceptions\InvalidMsisdnException;
@@ -30,7 +29,6 @@ class Msisdn
      */
     public function __construct($msisdn)
     {
-
         if (Msisdn::validate($msisdn) === false) {
             throw new InvalidMsisdnException(
                 'The supplied MSISDN is not valid. ' .
@@ -148,8 +146,9 @@ class Msisdn
         // – [3] -> the phone number without the country code. Includes the local prefix.
         // – [4] -> the local prefix, either 84 or 85.
         $matchGroup = array();
-        if (preg_match('/^(\+|00)?(258)?((82|83|84|85|86|87)\d{7})$/', $msisdn, $matchGroup))
+        if (preg_match('/^(\+|00)?(258)?((82|83|84|85|86|87)\d{7})$/', $msisdn, $matchGroup)) {
             return  $matchGroup[3];
+        }
         return false;
     }
 

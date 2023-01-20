@@ -1,4 +1,5 @@
 <?php
+
 namespace Samuelbie\MzMsisdn\Exceptions;
 
 class InvalidMsisdnException extends \Exception

@@ -1,4 +1,5 @@
 <?php
+
 namespace Samuelbie\MzMsisdn\Rules;
 
 use Exception;
@@ -27,12 +28,13 @@ class ValidMsisdn implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (is_null($this->network))
+        if (is_null($this->network)) {
             try {
                 return Msisdn::validate($value) ? true : false;
             } catch (Exception $e) {
                 return false;
             }
+        }
 
         $number = null;
         try {
